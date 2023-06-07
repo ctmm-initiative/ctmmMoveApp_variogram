@@ -26,7 +26,7 @@ shinyModuleUserInterface <- function(id, label) {
 }
 
 shinyModule <- function(input, output, session, data){ ## The parameter "data" is reserved for the data object passed on from the previous app
-  ns <- session$ns ## all IDs of UI functions need to be wrapped in ns()
+  ns <- session$ns 
   
   svf <- lapply(data, variogram)
   
