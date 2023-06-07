@@ -11,12 +11,12 @@ shinyModuleUserInterface <- function(id, label) {
                sliderInput(
                  ns("fraction"),
                  "Fraction:",
-                 min = 0, max = 1, value = 0.
+                 min = 0, max = 1, value = 1.
                ),
                sliderInput(
                  ns("columns"),
                  "Columns:",
-                 min = 1, max = 10, value = 2.
+                 min = 1, max = 10, value = 3.
                )
              )
       )
@@ -34,18 +34,23 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
     ceiling(length(svf) / input$columns)
   })
   
-  extent_tele <- ctmm::extent(svf)
   
   output$plot <- renderPlot({
+  
+    max.lag <- max(sapply(svf, function(v){ last(v$lag) } ))
+    xlim <- max.lag * input$fraction
+    svf <- lapply(svf,
+                  function(svf) svf[svf$lag <= xlim, ])
     
-    req(input$fraction)
+    extent_tele <- ctmm::extent(svf)
     
     graphics::par(mfrow = c(row_count(), input$columns),
                   mar = c(5, 5, 4, 1), ps = 18, cex = 1, cex.main = 0.9)
     
     for (i in seq_along(svf)) {
+      print(input$fraction)
       plot(svf[[i]], 
-           fraction = input$fraction,
+           fraction = 1,
            xlim = c(0, extent_tele["max", "x"]),
            ylim = c(0, extent_tele["max", "y"]),
            bty="n")
