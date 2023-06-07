@@ -1,15 +1,14 @@
 {
-  "settings": [
-    {
-      "id": "zoom",
-      "name": "Zoom",
-      "description": "Quantile fraction of the data, Gaussian ctmm, or UD range to plot, whichever is larger.",
-      "defaultValue": 1.0,
-      "type": "DOUBLE"
-    }
-  ],
+  "settings": [],
   "dependencies": {
     "R": [
+      {
+        "name": "lubridate",
+        "version": "1.7.10"
+      },
+      {
+        "name": "move"
+      },
       {
         "name": "ctmm"
       }
@@ -53,7 +52,7 @@
     }
   ],
   "documentation": {
-    "url": "https://github.com/yourAccount/my-app/README.md"
+    "url": "https://github.com/yourAccount/Name-of-App/.../README.md"
   }
 }
 
