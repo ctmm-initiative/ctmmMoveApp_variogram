@@ -14,6 +14,19 @@ LABEL maintainer = "couchbits GmbH <us@couchbits.com>"
 # The user docker is member of the group staff and could write to /usr/local/lib/R/site-library.
 # https://github.com/rocker-org/rocker/wiki/managing-users-in-docker
 #  (to simplify things we use the same directory as for co-pilot-r)
+
+# ctmm fix
+USER root:root
+
+RUN apt-get update && apt-get install -y \
+
+   libmpfr-dev \
+
+   && apt-get clean
+
+USER $UID:$GID
+# end ctmm fix - remove later
+
 RUN useradd --create-home --shell /bin/bash moveapps --groups staff
 USER moveapps:staff
 
