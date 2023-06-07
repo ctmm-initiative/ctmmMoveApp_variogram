@@ -1,5 +1,4 @@
 library(shiny)
-library(dplyr)
 library(ctmm)
 
 shinyModuleUserInterface <- function(id, label) {
