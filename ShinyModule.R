@@ -1,5 +1,6 @@
 library(shiny)
 library(ctmm)
+library(dplyr)
 
 shinyModuleUserInterface <- function(id, label) {
   ns <- NS(id) ## all IDs of UI functions need to be wrapped in ns()
@@ -48,7 +49,6 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
                   mar = c(5, 5, 4, 1), ps = 18, cex = 1, cex.main = 0.9)
     
     for (i in seq_along(svf)) {
-      print(input$fraction)
       plot(svf[[i]], 
            fraction = 1,
            xlim = c(0, extent_tele["max", "x"]),

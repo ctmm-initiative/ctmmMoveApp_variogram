@@ -7,6 +7,9 @@
       },
       {
         "name": "ctmm"
+      },
+      {
+        "name": "dplyr"
       }
     ]
   },
