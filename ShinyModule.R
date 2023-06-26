@@ -18,6 +18,10 @@ shinyModuleUserInterface <- function(id, label) {
                  ns("columns"),
                  "Columns:",
                  min = 1, max = 10, value = 3.
+               ), 
+               checkboxInput(
+                 ns("plot_axes"), 
+                 "Free axes", value = FALSE
                )
              )
       )
@@ -43,19 +47,29 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
     svf <- lapply(svf,
                   function(svf) svf[svf$lag <= xlim, ])
     
-    extent_tele <- ctmm::extent(svf)
-    
     graphics::par(mfrow = c(row_count(), input$columns),
                   mar = c(5, 5, 4, 1), ps = 18, cex = 1, cex.main = 0.9)
     
-    for (i in seq_along(svf)) {
-      plot(svf[[i]], 
-           fraction = 1,
-           xlim = c(0, extent_tele["max", "x"]),
-           ylim = c(0, extent_tele["max", "y"]),
-           bty="n")
-      graphics::title(names(svf[i]))
+    if (input$plot_axes) {
+      extent_tele <- ctmm::extent(svf)
+      for (i in seq_along(svf)) {
+        plot(svf[[i]], 
+             fraction = 1,
+             xlim = c(0, extent_tele["max", "x"]),
+             ylim = c(0, extent_tele["max", "y"]),
+             bty="n")
+        graphics::title(names(svf[i]))
+      }
+    }  else {
+      for (i in seq_along(svf)) {
+        plot(svf[[i]], 
+             fraction = 1,
+             bty="n")
+        graphics::title(names(svf[i]))
+      }
     }
+    
+    
     
   })
   
