@@ -40,6 +40,7 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
   })
   
   
+  # Individual plots
   output$plot <- renderPlot({
   
     max.lag <- max(sapply(svf, function(v){ last(v$lag) } ))
@@ -68,9 +69,6 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
         graphics::title(names(svf[i]))
       }
     }
-    
-    
-    
   })
   
   return(reactive({ 
