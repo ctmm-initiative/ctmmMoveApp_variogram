@@ -6,25 +6,26 @@ shinyModuleUserInterface <- function(id, label) {
   ns <- NS(id) ## all IDs of UI functions need to be wrapped in ns()
   tagList(
     titlePanel("Outlier detection"),
-    fluidRow(
-      column(4,
-             wellPanel(
-               sliderInput(
+    wellPanel(
+               fluidRow(
+                 column(5, sliderInput(
                  ns("fraction"),
                  "Fraction:",
-                 min = 0, max = 1, value = 1.
-               ),
-               sliderInput(
+                 min = 0, max = 1, value = .5
+               )),
+               column(5, sliderInput(
                  ns("columns"),
                  "Columns:",
                  min = 1, max = 10, value = 3.
-               ), 
-               checkboxInput(
-                 ns("plot_axes"), 
-                 "Free axes", value = FALSE
-               )
-             )
-      )
+               )), 
+               column(2, 
+                      checkboxInput(
+                         ns("plot_axes"), 
+                         "Free axes", value = FALSE
+                       ),
+                      uiOutput(ns("selectvar"))
+               
+               ))
     ),
     plotOutput(ns("plot"))
   )
@@ -33,43 +34,71 @@ shinyModuleUserInterface <- function(id, label) {
 shinyModule <- function(input, output, session, data){ ## The parameter "data" is reserved for the data object passed on from the previous app
   ns <- session$ns 
   
-  svf <- lapply(data, variogram)
-  
-  row_count <- reactive({
-    ceiling(length(svf) / input$columns)
+  output$selectvar <- renderUI({
+    selectInput(ns("select_input"), "Variable:",
+                c("All", "Population Variogram", names(data)))
   })
   
-  
-  # Individual plots
-  output$plot <- renderPlot({
-  
-    max.lag <- max(sapply(svf, function(v){ last(v$lag) } ))
-    xlim <- max.lag * input$fraction
-    svf <- lapply(svf,
-                  function(svf) svf[svf$lag <= xlim, ])
+  filter_id <- reactive({
+    input$select_input
+  })
+  observeEvent(input$select_input, {
+    print(filter_id())
     
-    graphics::par(mfrow = c(row_count(), input$columns),
-                  mar = c(5, 5, 4, 1), ps = 18, cex = 1, cex.main = 0.9)
+    svf <- lapply(data, variogram)
     
-    if (input$plot_axes) {
-      extent_tele <- ctmm::extent(svf)
-      for (i in seq_along(svf)) {
-        plot(svf[[i]], 
-             fraction = 1,
-             xlim = c(0, extent_tele["max", "x"]),
-             ylim = c(0, extent_tele["max", "y"]),
-             bty="n")
-        graphics::title(names(svf[i]))
+    svf1 <- if (filter_id() == "All") {
+      svf
+    } else if (filter_id() == "Population Variogram") {
+      mean(svf)
+    } else {
+      svf[grep(filter_id(), names(svf))]
+    }
+    
+    row_count <- reactive({
+      ceiling(length(svf1) / input$columns)
+    })
+    
+    
+    # Individual plots
+    output$plot <- renderPlot({
+      req(svf1)
+      
+      if(filter_id() == "All") {
+      max.lag <- max(sapply(svf1, function(v){ last(v$lag) } ))
+      xlim <- max.lag * input$fraction
+      svf <- lapply(svf1,
+                    function(svf) svf[svf$lag <= xlim, ])
+      
+      graphics::par(mfrow = c(row_count(), input$columns),
+                    mar = c(5, 5, 4, 1), ps = 18, cex = 1, cex.main = 0.9)
+      
+      if (input$plot_axes) {
+        extent_tele <- ctmm::extent(svf1)
+        for (i in seq_along(svf1)) {
+          plot(svf1[[i]], 
+               fraction = 1,
+               xlim = c(0, extent_tele["max", "x"]),
+               ylim = c(0, extent_tele["max", "y"]),
+               bty="n")
+          graphics::title(names(svf1[i]))
+        }
+      }  else {
+        for (i in seq_along(svf1)) {
+          plot(svf1[[i]], 
+               fraction = 1,
+               bty="n")
+          graphics::title(names(svf1[i]))
+        }
       }
-    }  else {
-      for (i in seq_along(svf)) {
-        plot(svf[[i]], 
-             fraction = 1,
-             bty="n")
-        graphics::title(names(svf[i]))
-      }
+    } else {
+      plot(svf1)
     }
   })
+})
+
+  
+
   
   return(reactive({ 
     data
