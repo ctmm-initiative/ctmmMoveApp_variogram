@@ -17,11 +17,16 @@ ctmm `telemetry.list`.
 
 
 ### Artefacts
-
 none
 
 ### Settings
-*Since our switch to use shiny bookmarks for storing seleted settings made in the UI, it is not possible any more to have settings in MoveApps to set before running the App and opening the UI. Instead a `store settings` button is included in the UI.
+`Fraction`: Initial fraction of the variogram to render. 
+
+`Columns`: The number of panels of the figure. 
+
+`Same axes for all individuals`: For all individuals the scaling of the x-axis and y-axis are used. 
+
+`Select animal(s)`: By default `All` animals are selected. Other options are to select individual animals or select `population` for a population-level variogram. 
 
 `Store settings`: click to store the current settings of the app for future workflow runs
 
@@ -29,5 +34,4 @@ none
 Please file an issue if you encounter an error. 
 
 ### Null or error handling
-
 No variograms are produced. 
