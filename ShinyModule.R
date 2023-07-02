@@ -5,7 +5,7 @@ library(dplyr)
 shinyModuleUserInterface <- function(id, label) {
   ns <- NS(id) ## all IDs of UI functions need to be wrapped in ns()
   tagList(
-    titlePanel("Outlier detection"),
+    titlePanel("Variogram"),
     wellPanel(
                fluidRow(
                  column(5, sliderInput(
@@ -21,7 +21,7 @@ shinyModuleUserInterface <- function(id, label) {
                column(2, 
                       checkboxInput(
                          ns("plot_axes"), 
-                         "Free axes", value = FALSE
+                         "Same axes for all individuals", value = FALSE
                        ),
                       uiOutput(ns("selectvar"))
                
@@ -35,7 +35,7 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
   ns <- session$ns 
   
   output$selectvar <- renderUI({
-    selectInput(ns("select_input"), "Variable:",
+    selectInput(ns("select_input"), "Select animal(s):",
                 c("All", "Population Variogram", names(data)))
   })
   
@@ -43,8 +43,6 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
     input$select_input
   })
   observeEvent(input$select_input, {
-    print(filter_id())
-    
     svf <- lapply(data, variogram)
     
     svf1 <- if (filter_id() == "All") {
