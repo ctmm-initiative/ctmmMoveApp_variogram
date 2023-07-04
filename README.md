@@ -2,7 +2,7 @@
 
 MoveApps
 
-Github repository: *github.com/yourAccount/Name-of-App* *(the link to the repository where the code of the app can be found must be provided)*
+Github repository: https://github.com/ctmm-initiative/moveapps_ctmm_variogram
 
 ## Description
 Create a variogram. 
