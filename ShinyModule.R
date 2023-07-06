@@ -75,7 +75,7 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
         extent_tele <- ctmm::extent(svf1)
         for (i in seq_along(svf1)) {
           plot(svf1[[i]], 
-               fraction = 1,
+               fraction = input$fraction,
                xlim = c(0, extent_tele["max", "x"]),
                ylim = c(0, extent_tele["max", "y"]),
                bty="n")
@@ -84,7 +84,7 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
       }  else {
         for (i in seq_along(svf1)) {
           plot(svf1[[i]], 
-               fraction = 1,
+               fraction = input$fraction,
                bty="n")
           graphics::title(names(svf1[i]))
         }
