@@ -90,7 +90,7 @@ shinyModule <- function(input, output, session, data){ ## The parameter "data" i
         }
       }
     } else {
-      plot(svf1)
+      plot(svf1, fraction = input$fraction)
     }
   })
 })
