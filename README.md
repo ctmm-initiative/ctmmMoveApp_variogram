@@ -2,7 +2,7 @@
 
 MoveApps
 
-Github repository: https://github.com/ctmm-initiative/moveapps_ctmm_variogram
+Github repository: https://github.com/ctmm-initiative/ctmmMoveApp_variogram
 
 ## Description
 Creates a variogram for visualisation of the autocorrelation structure of the movement tracks. 
